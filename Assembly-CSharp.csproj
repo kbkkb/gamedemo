@@ -45,16 +45,12 @@
     <Analyzer Include="D:\UnityHub\UnityEditor\2022.3.55f1c1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\UI\MainMenu\NewBehaviourScript.cs" />
+    <Compile Include="Assets\Scripts\Core\Data\Item.cs" />
     <Compile Include="Assets\Scripts\Core\Data\PlayerStatsData.cs" />
-    <Compile Include="Assets\Scripts\UI\MainUI.cs" />
-    <Compile Include="Assets\Scripts\Core\Data\InventoryItem.cs" />
     <Compile Include="Assets\Scripts\Core\Managers\GameDataManager.cs" />
     <Compile Include="Assets\Scripts\UI\TabView\TabView.cs" />
     <Compile Include="Assets\Scripts\UI\UIWindows.cs" />
-    <Compile Include="Assets\Scripts\UI\UIEscPanel.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerController.cs" />
-    <Compile Include="Assets\Scripts\UI\UIOver.cs" />
     <Compile Include="Assets\Scripts\Items\Spike.cs" />
     <Compile Include="Assets\Scripts\Core\Managers\AudioManager.cs" />
     <Compile Include="Assets\Scripts\Data\Timedata.cs" />
@@ -62,7 +58,6 @@
     <Compile Include="Assets\Scripts\Core\Managers\BagManager.cs" />
     <Compile Include="Assets\Scripts\Core\Managers\GameManager.cs" />
     <Compile Include="Assets\Scripts\Core\Managers\UIManager.cs" />
-    <Compile Include="Assets\Scripts\UI\MainMenu\UIMainMenu.cs" />
     <Compile Include="Assets\Scripts\UI\SaveLoadTestUI.cs" />
     <Compile Include="Assets\Scripts\Core\Utils\Singleton.cs" />
     <Compile Include="Assets\Scripts\Core\Managers\SaveManager.cs" />
@@ -71,11 +66,11 @@
     <Compile Include="Assets\Scripts\UI\TabView\TabButton.cs" />
     <Compile Include="Assets\Scripts\UI\PlayerUIManager.cs" />
     <Compile Include="Assets\Scripts\Core\Managers\DataManager.cs" />
-    <Compile Include="Assets\Scripts\UI\MainMenu\UIRanking.cs" />
     <Compile Include="Assets\Scripts\Core\Managers\PlayerManager.cs" />
     <Compile Include="Assets\Scripts\Core\Data\SaveData.cs" />
-    <Compile Include="Assets\Scripts\Data\Item.cs" />
+    <Compile Include="Assets\Scripts\Core\Utils\CsvToJson.cs" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
+    <None Include="Assets\Resources\Data\ItemDefine.json" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
@@ -88,7 +83,6 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile SSD.shader" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
-    <None Include="Assets\Resources\Data\ItemDefine.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
@@ -98,6 +92,8 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Sprites\EmojiOne.json" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Sprite.shader" />
+    <None Include="Assets\Resources\Data\itemsample.json" />
+    <None Include="Assets\Data\Json\ItemDefine.json" />
     <Reference Include="UnityEngine">
       <HintPath>D:\UnityHub\UnityEditor\2022.3.55f1c1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>
@@ -352,6 +348,9 @@
     </Reference>
     <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
       <HintPath>D:\game\gamedemo_git\Library\PackageCache\com.unity.visualscripting@1.9.4\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>D:\game\gamedemo_git\Library\PackageCache\com.unity.nuget.newtonsoft-json@3.2.1\Runtime\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>D:\UnityHub\UnityEditor\2022.3.55f1c1\Editor\Data\NetStandard\ref\2.1.0\netstandard.dll</HintPath>
