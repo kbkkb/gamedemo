@@ -1,0 +1,18 @@
+[
+    {
+        "Id": 1,
+        "Name": "Iron Sword",
+        "Description": "A sturdy sword made of iron.",
+        "Icon": "sword_icon",
+        "Type": "Weapon",  
+        "StackLimit": 1
+    },
+    {
+        "Id": 2,
+        "Name": "Health Potion",
+        "Description": "Restores 50 HP.",
+        "Icon": "health_potion_icon",
+        "Type": "Consumable",  
+        "StackLimit": 10
+    }
+]

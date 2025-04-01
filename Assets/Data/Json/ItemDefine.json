@@ -1,0 +1,29 @@
+[
+  {
+    "ID": "1",
+    "Name": "Sword",
+    "Description": "A sharp sword.",
+    "Icon": "sword.png",
+    "Type": "Weapon",
+    "StackLimit": "1",
+    "Function": "Damage"
+  },
+  {
+    "ID": "2",
+    "Name": "Health Potion",
+    "Description": "Restores health.",
+    "Icon": "potion.png",
+    "Type": "Consumable",
+    "StackLimit": "10",
+    "Function": "AddHP"
+  },
+  {
+    "ID": "3",
+    "Name": "Iron Armor",
+    "Description": "Strong armor.",
+    "Icon": "armor.png",
+    "Type": "Armor",
+    "StackLimit": "1",
+    "Function": "None"
+  }
+]

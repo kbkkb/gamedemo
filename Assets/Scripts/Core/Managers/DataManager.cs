@@ -1,153 +1,71 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using Code.Data;
 using UnityEngine;
+using Newtonsoft.Json;
 
-public class DataManager : MonoBehaviour
+public class DataManager : Singleton<DataManager>
 {
-    public static DataManager Instance { get; private set; }
 
-    private Dictionary<int, Item> items = new Dictionary<int, Item>();
-    public float[] Rank = new float[10];
-    private void Awake()
+    private Dictionary<int, Item> itemData = new Dictionary<int, Item>();  // 存储配置项
+
+
+    // 读取JSON文件并解析
+    public void LoadItemData(string jsonFilePath)
     {
-        if (Instance != null && Instance != this)
+        try
         {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
+            string json = File.ReadAllText(jsonFilePath);
+            List<ItemJson> items = JsonConvert.DeserializeObject<List<ItemJson>>(json);
 
-        
-        
-    }
-
-    private void Start()
-    {
-        Rank = LoadArray();
-        if (Rank == null)
-        {
-            Rank = new float[10];
-            for (int i = 0; i < Rank.Length; i++)
+            // 将 ItemJson 数据转换为 Item 并存储到字典中
+            foreach (var item in items)
             {
-                Rank[i] = -1;
+                itemData[item.Id] = new Item(
+                    item.Id,
+                    item.Name,
+                    item.Description,
+                    item.Icon,
+                    item.Type,  // 使用 ItemType 枚举
+                    item.StackLimit
+                );
             }
 
-            SaveArray(Rank);
+            Debug.Log("物品数据加载成功！");
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"加载物品数据时发生错误: {ex.Message}");
         }
     }
-    // 存储数组到PlayerPrefs
-    
-    public void SaveArray(float[] rank)
+    public Dictionary<int, Item> GetAllItems()
     {
-        if (rank.Length > 10)
-        {
-            Debug.LogError("数组长度不能超过10！");
-            return;
-        }
-
-        string keyPrefix = "ArrayElement_";
-        PlayerPrefs.SetInt(keyPrefix + "Length", rank.Length); // 存储数组长度
-        PlayerPrefs.Save(); // 保存设置
-
-        for (int i = 0; i < rank.Length; i++)
-        {
-            PlayerPrefs.SetFloat(keyPrefix + i, rank[i]); // 存储数组元素
-        }
-        PlayerPrefs.Save(); // 保存设置
-        Rank = LoadArray();
+        return itemData;
     }
     
-    public float[] LoadArray()
-    {
-        string keyPrefix = "ArrayElement_";
-        int length = PlayerPrefs.GetInt(keyPrefix + "Length", -1); // 读取数组长度
-
-        if (length == -1)
-        {
-            Debug.LogError("没有找到数组数据！");
-            return null;
-        }
-        else if (length > 10)
-        {
-            Debug.LogError("数组长度超过了10！");
-            return null;
-        }
-
-        float[] array = new float[length];
-        for (int i = 0; i < length; i++)
-        {
-            array[i] = PlayerPrefs.GetFloat(keyPrefix + i); // 读取数组元素
-        }
-
-        return array;
-    }
-    
-    public static int[] LoadArray(string key)
-    {
-        int length = PlayerPrefs.GetInt(key + "Length", -1);
-        if (length == -1) return null;
-        int[] array = new int[length];
-        for (int i = 0; i < length; i++)
-        {
-            array[i] = PlayerPrefs.GetInt(key + i);
-        }
-        return array;
-    }
-    
-    
-    
-    
-    
-    
-    
-
-    [System.Serializable]
-    public class ItemListWrapper
-    {
-        public List<Item> list;
-    }
-
-    private void LoadData()
-    {
-        // 加载资源中的 JSON 文件，路径不要加扩展名
-        TextAsset itemsJson = Resources.Load<TextAsset>("Resources/Data/ItemDefine");
-
-        if (itemsJson != null)
-        {
-            Debug.Log("JSON Content: " + itemsJson.text);
-
-            // 使用 ItemListWrapper 作为中间包装
-            ItemListWrapper itemWrapper = JsonUtility.FromJson<ItemListWrapper>(itemsJson.text);
-        
-            // 检查解析后的结果
-            if (itemWrapper != null && itemWrapper.list != null)
-            {
-                //Debug.Log("ItemWrapper loaded, list size: " + itemWrapper.list.Count);
-
-                // 将物品加载到字典中
-                foreach (var item in itemWrapper.list)
-                {
-                    //Debug.Log($"Loaded item: {item.ItemName}, ID: {item.ItemId}");
-                    items[item.ItemId] = item;
-                }
-            }
-
-        }
-
-
-    }
-    
+    // 根据物品ID获取物品
     public Item GetItemById(int id)
     {
-        return items.TryGetValue(id, out var item) ? item : null;
+        if (itemData.ContainsKey(id))
+        {
+            return itemData[id];
+        }
+        else
+        {
+            Debug.LogWarning($"未找到物品ID: {id}");
+            return null;  // 或者抛出异常，具体看需求
+        }
     }
-    [System.Serializable]
-    public class Wrapper<T>
+
+    // 用于反序列化JSON文件的Item类
+    [Serializable]
+    public class ItemJson
     {
-        public List<T> list;
+        public int Id;          // 物品的唯一ID
+        public string Name;     // 物品的名称
+        public string Description; // 物品的描述
+        public string Icon;     // 物品的图标（路径）
+        public ItemType Type;   // 物品的类型（如武器、消耗品等）
+        public int StackLimit;    // 物品的最大堆叠数
     }
 }

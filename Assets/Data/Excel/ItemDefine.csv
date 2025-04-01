@@ -1,0 +1,4 @@
+﻿ID,Name,Description,Icon,Type,StackLimit,Function
+1,Sword,A sharp sword.,sword.png,Weapon,1,Damage
+2,Health Potion,Restores health.,potion.png,Consumable,10,AddHP
+3,Iron Armor,Strong armor.,armor.png,Armor,1,None

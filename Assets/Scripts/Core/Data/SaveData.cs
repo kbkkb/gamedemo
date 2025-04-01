@@ -16,7 +16,7 @@ public class SaveData
 
     // 其他游戏数据
     public Dictionary<string, bool> unlockedLevels;
-    public List<InventoryItem> inventoryItems;
+    public List<Item> items;
     public List<Achievement> achievements;
 
     public SaveData()
@@ -30,7 +30,7 @@ public class SaveData
 
         // 初始化其他数据
         unlockedLevels = new Dictionary<string, bool>();
-        inventoryItems = new List<InventoryItem>();
+        items = new List<Item>();
         achievements = new List<Achievement>();
     }
 
@@ -46,7 +46,7 @@ public class SaveData
         saveData.playTime = dataManager.playTime;
         saveData.saveTime = DateTime.Now;
         saveData.unlockedLevels = new Dictionary<string, bool>(dataManager.unlockedLevels);
-        saveData.inventoryItems = new List<InventoryItem>(dataManager.inventoryItems);
+        saveData.items = new List<Item>(dataManager.items);
         saveData.achievements = new List<Achievement>(dataManager.achievements);
 
         return saveData;

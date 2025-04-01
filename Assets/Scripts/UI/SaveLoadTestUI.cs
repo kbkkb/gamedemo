@@ -2,13 +2,16 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using GameData;
+using UnityEngine.Serialization;
 
-public class SaveLoadTestUI : MonoBehaviour
+public class SaveLoadTestUI : UIWindows
 {
     [Header("按钮")]
     public Button saveButton;
     public Button loadButton;
-    public Button deleteButton;
+    //public Button deleteButton;
+    public Button bagButton;
+    
 
     [Header("状态显示")]
     public Text statusText;
@@ -25,11 +28,12 @@ public class SaveLoadTestUI : MonoBehaviour
         {
             loadButton.onClick.AddListener(OnLoadButtonClick);
         }
-        if (deleteButton != null)
-        {
-            deleteButton.onClick.AddListener(OnDeleteButtonClick);
-        }
+        // if (deleteButton != null)
+        // {
+        //     deleteButton.onClick.AddListener(OnDeleteButtonClick);
+        // }
 
+        bagButton.onClick.AddListener(OpenBagUI);
         // 更新UI状态
         UpdateUI();
     }
@@ -92,6 +96,15 @@ public class SaveLoadTestUI : MonoBehaviour
             UpdateUI();
         }
     }
+    
+    private void OpenBagUI()
+    {
+        UIBag bagUI = UIManager.Instance.Show<UIBag>();
+        if (bagUI == null)
+        {
+            Debug.LogError("无法打开背包 UI，检查是否已注册 UI 资源");
+        }
+    }
 
     private void UpdateUI()
     {
@@ -105,9 +118,9 @@ public class SaveLoadTestUI : MonoBehaviour
             loadButton.interactable = GameDataManager.Instance.HasSaveData();
         }
 
-        if (deleteButton != null)
-        {
-            deleteButton.interactable = GameDataManager.Instance.HasSaveData();
-        }
+        // if (deleteButton != null)
+        // {
+        //     deleteButton.interactable = GameDataManager.Instance.HasSaveData();
+        // }
     }
 } 

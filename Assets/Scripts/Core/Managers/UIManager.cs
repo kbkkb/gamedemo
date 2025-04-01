@@ -1,61 +1,59 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UIManager : MonoBehaviour
+public class UIManager : Singleton<UIManager>
 {
-    public static UIManager Instance { get; private set; }
-    
     class UIElement
     {
         public string Resources;
         public bool Cache;
         public GameObject Instance;
     }
-    
+
     private Dictionary<Type, UIElement> UIResources = new Dictionary<Type, UIElement>();
+    private Canvas mainCanvas;
+
     private void Awake()
     {
-        // 确保只有一个实例存在
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject); // 如果已经有一个实例存在，销毁当前对象
-            return;
-        }
+        UIResources.Add(typeof(UIBag), new UIElement() { Resources = "UI/UIBag", Cache = false });
+    }
 
-        Instance = this;
-        DontDestroyOnLoad(gameObject); // 如果需要在场景切换时保留单例
-    }
-    
-    public UIManager()
+    private void Start()
     {
-        this.UIResources.Add(typeof(UIBag), new UIElement() { Resources = "UI/UIBag", Cache = false });
-    }
-    
-    public T Show<T>()
-    {
-        //Sound
-        Type type = typeof(T);
-        if(this.UIResources.ContainsKey(type))
+        mainCanvas = FindObjectOfType<Canvas>();
+        if (mainCanvas == null)
         {
-            UIElement info = this.UIResources[type];
-            if(info.Instance!=null)
+            Debug.LogError("没有找到 Canvas！");
+        }
+    }
+
+    public T Show<T>() where T : Component
+    {
+        Type type = typeof(T);
+        if (UIResources.ContainsKey(type))
+        {
+            UIElement info = UIResources[type];
+            if (info.Instance != null)
             {
                 info.Instance.SetActive(true);
             }
             else
             {
                 UnityEngine.Object prefab = Resources.Load(info.Resources);
-                if(prefab==null)
+                if (prefab == null)
                 {
-                    return default(T);
+                    Debug.LogError($"UI 资源未找到: {info.Resources}");
+                    return null;
                 }
-                info.Instance = (GameObject)GameObject.Instantiate(prefab);
-                Canvas canvas = UnityEngine.Object.FindObjectOfType<Canvas>();
+
+                info.Instance = GameObject.Instantiate(prefab) as GameObject;
+                UIResources[type] = info; // 更新字典
+
+                Canvas canvas = mainCanvas ?? FindObjectOfType<Canvas>();
                 if (canvas != null)
                 {
-                    info.Instance.transform.SetParent(canvas.transform, false); // 设置父物体为 Canvas
+                    info.Instance.transform.SetParent(canvas.transform, false);
                 }
                 else
                 {
@@ -64,26 +62,31 @@ public class UIManager : MonoBehaviour
             }
             return info.Instance.GetComponent<T>();
         }
-        return default(T);
+        Debug.LogError($"UI 类型 {type} 未注册");
+        return null;
     }
+
     public void Close(Type type)
     {
-        //sound
-        if(this.UIResources.ContainsKey(type))
+        if (UIResources.ContainsKey(type))
         {
-            UIElement info = this.UIResources[type];
-            if(info.Cache)
+            UIElement info = UIResources[type];
+            if (info.Instance != null)
             {
-                info.Instance.SetActive(false);
-            }
-            else
-            {
-                GameObject.Destroy(info.Instance);
-                info.Instance = null;
+                if (info.Cache)
+                {
+                    info.Instance.SetActive(false);
+                }
+                else
+                {
+                    GameObject.Destroy(info.Instance);
+                    info.Instance = null;
+                }
             }
         }
     }
-    public void Destroy()
+
+    public void DestroyUIManager()
     {
         Destroy(gameObject);
     }

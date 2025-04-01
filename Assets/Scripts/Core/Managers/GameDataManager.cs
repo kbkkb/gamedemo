@@ -14,7 +14,7 @@ public class GameDataManager : Singleton<GameDataManager>
     public float playTime { get; private set; }
     public DateTime saveTime { get; private set; }
     public Dictionary<string, bool> unlockedLevels { get; private set; }
-    public List<InventoryItem> inventoryItems { get; private set; }
+    public List<Item> items { get; private set; }
     public List<Achievement> achievements { get; private set; }
 
     private const string SAVE_KEY = "GameSaveData";
@@ -31,7 +31,7 @@ public class GameDataManager : Singleton<GameDataManager>
         // 初始化数据
         playerStats = PlayerStats.Instance;
         unlockedLevels = new Dictionary<string, bool>();
-        inventoryItems = new List<InventoryItem>();
+        items = new List<Item>();
         achievements = new List<Achievement>();
         playTime = 0f;
     }
@@ -83,7 +83,7 @@ public class GameDataManager : Singleton<GameDataManager>
                 playerPosition = GameObject.FindGameObjectWithTag("Player")?.transform.position ?? Vector3.zero,
                 currentScene = currentScene,
                 playTime = playTime,
-                inventoryItems = inventoryItems,
+                items = items,
                 unlockedLevels = unlockedLevels,
                 achievements = achievements
             };
@@ -158,9 +158,9 @@ public class GameDataManager : Singleton<GameDataManager>
             playTime = saveData.playTime;
 
             // 应用背包数据
-            if (saveData.inventoryItems != null)
+            if (saveData.items != null)
             {
-                inventoryItems = new List<InventoryItem>(saveData.inventoryItems);
+                items = new List<Item>(saveData.items);
             }
 
             // 应用关卡解锁状态
